@@ -44,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: v789c-apk
-          path: v789c/v789c-*.apk
+          path:
