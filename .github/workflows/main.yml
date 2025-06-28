@@ -34,14 +34,20 @@ jobs:
         run: flutter build apk --release
         working-directory: ./v789c
 
-      - name: 🔧 Rename APK with version
-        run: |
-          VERSION_NAME=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d "+" -f1)
-          cp build/app/outputs/flutter-apk/app-release.apk v789c-${VERSION_NAME}.apk
-        working-directory: ./v789c
+      - name: 🧱 Copy APK with version
+  run: |
+    echo "🔍 Listing before copy"
+    ls -lah build/app/outputs/flutter-apk/
+    
+    VERSION_NAME=$(grep '^version:' pubspec.yaml | cut -d ':' -f2 | xargs | cut -d "+" -f1)
+    echo "✅ Version: ${VERSION_NAME}"
+    
+    cp build/app/outputs/flutter-apk/app-release.apk v789c-${VERSION_NAME}.apk
+    ls -lah
+  working-directory: ./v789c
 
-      - name: 📦 Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: v789c-apk
-          path: v789c/v789c-*.apk
+- name: 📦 Upload APK Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: v789c-apk
+    path: v789c/v789c-*.apk
