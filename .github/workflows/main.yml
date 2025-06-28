@@ -1,0 +1,35 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 💫 Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.x'
+
+      - name: 🧩 Install dependencies
+        run: flutter pub get
+
+      - name: 🛠️ Build .apk
+        run: flutter build apk --release
+
+      - name: 🔧 Rename APK with version
+        run: |
+          VERSION_NAME=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d "+" -f1)
+          cp build/app/outputs/flutter-apk/app-release.apk v789c-${VERSION_NAME}.apk
+
+      - name: 📦 Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v789c-apk
+          path: v789c-*.apk
