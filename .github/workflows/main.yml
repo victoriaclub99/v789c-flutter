@@ -19,17 +19,14 @@ jobs:
 
     - name: 🧩 Install dependencies
       run: flutter pub get
-      working-directory: ./v789c
 
     - name: 🛠️ Build APK
       run: flutter build apk --release
-      working-directory: ./v789c
 
     - name: 🔧 Rename APK with version
       run: |
         VERSION_NAME=$(grep '^version:' pubspec.yaml | cut -d ':' -f2 | xargs | cut -d "+" -f1)
         cp build/app/outputs/flutter-apk/app-release.apk v789c-${VERSION_NAME}.apk
-      working-directory: ./v789c
 
     - name: 📦 Upload APK Artifact
       uses: actions/upload-artifact@v4
